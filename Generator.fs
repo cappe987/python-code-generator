@@ -6,6 +6,7 @@ open Utils
 open Types
 // open Table
 
+let rand = System.Random()
 
 module Monoid = 
 
@@ -87,7 +88,7 @@ module Statements =
     }
 
 
-  let declareVariable state = 
+  let makeVariable state = 
     let name = Variables.genRandomName state
     let (tablevalue, value) = Variables.getRandomType state
     let indentation = getIndent state
@@ -98,7 +99,7 @@ module Statements =
         table=Map.add name tablevalue (state.table)
     }
 
-  let decIf : Statement = 
+  let declareIf : Statement = 
     let inner (instate : State) = 
       let indentation = getIndent instate
       let line = "\n" + indentation + "if " + Variables.genBoolExpression instate + ":"
@@ -111,10 +112,10 @@ module Statements =
     inner
 
 
-  let decElse : Statement = 
+  let declareElse : Statement = 
     let inner (instate : State) = 
       let indentation = getIndent instate
-      let line = "\n" + indentation + "else " + ":"
+      let line = "\n" + indentation + "else" + ":"
 
       { instate with
           lines=line::instate.lines
@@ -123,35 +124,68 @@ module Statements =
 
     inner
 
+  let statementarr : Statement [] = 
+    [|
+      makePrint;
+      makeVariable;
+    |]
 
+  let randomStatement() = 
+    let x = rand.Next(0, Array.length statementarr)
+    statementarr.[x]
 
 
 
 
 
 module Blocks = 
+  // open System
   open Statements
   open Monoid
 
 
-  // let ifWith2Vars = (declareVariable >.> declareVariable) =>> decIf
+
+  // let ifWith2Vars = (makeVariable >.> makeVariable) =>> declareIf
 
   let (blockDummy, blockRef) = createDummy()
 
 
 
-
-
-  let ifelse = 
+  let makeIf : BlockStatement = 
     let inner depth = 
       if depth <= 1 then
-        declareVariable
+        makeVariable
       else
-        (blockDummy depth =>> decIf)
-        >.> 
-        (blockDummy depth  =>> decElse)
+        (blockDummy depth =>> declareIf)
+        >.> addNewline
     
     inner
+
+
+  let makeIfelse : BlockStatement = 
+    let inner depth = 
+      if depth <= 1 then
+        makeVariable
+      else
+        (blockDummy depth =>> declareIf)
+        >.> 
+        (blockDummy depth  =>> declareElse)
+        >.> addNewline
+    
+    inner
+
+
+
+  let blockarr = 
+    [|
+      makeIf; 
+      makeIfelse; 
+    |]
+
+
+  let randomBlock() = 
+    let x = rand.Next(0, Array.length blockarr)
+    blockarr.[x]
 
 
 
@@ -161,9 +195,9 @@ module Blocks =
   let getRandomStatement state = 
     let x = state.rand.Next(0, 10)
     match x with
-    | x when x < 3 -> (decIf, true)
-    // | x when x < 10 -> (declareVariable, false)
-    | x -> (declareVariable, false)
+    | x when x < 6 -> (declareIf, true)
+    // | x when x < 10 -> (makeVariable, false)
+    | x -> (makeVariable, false)
 
 
 
@@ -174,17 +208,20 @@ module Blocks =
 
       let (stmnt, isrec) = getRandomStatement state
       if isrec then
-        ifelse (depth - 1)
+        makeIfelse (depth - 1)
+        // >.> addNewline
+        >.> blockDummy (depth - 1)
 
         // let st1 = (blockDummy (depth - 1)) =>> stmnt
         // if x < 10 then
-        //   (blockDummy depth) >.> (declareVariable =>> st1)
+        //   (blockDummy depth) >.> (makeVariable =>> st1)
         // else
-        //   declareVariable =>> st1
+        //   makeVariable =>> st1
 
       else
         // stmnt 
        stmnt >.> blockDummy depth
+      //  >.> addNewline
 
     if depth <= 0 then
       state

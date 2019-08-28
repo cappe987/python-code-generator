@@ -21,6 +21,8 @@ type State = {
 
 type Statement = (State -> State)
 
+type BlockStatement = (int -> State -> State)
+
 type StatementType = 
   | Rec    of Statement
   | Nonrec of Statement

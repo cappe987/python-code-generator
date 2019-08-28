@@ -17,6 +17,7 @@ let writeToFile filename state =
 
 [<EntryPoint>]
 let main argv =
+  printfn "Starting..."
   let state = initState
 
   Blocks.makeBlocks 5 state
