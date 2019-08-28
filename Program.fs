@@ -20,10 +20,7 @@ let main argv =
   printfn "Starting..."
   let state = initState
 
-  Blocks.makeBlocks 5 state
-
-
-  // |> printCode
+  Blocks.makeBlocks 3 state
 
   |> writeToFile "output.py"
 

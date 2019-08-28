@@ -81,7 +81,11 @@ module Statements =
 
   let makePrint state = 
     let indentation = getIndent state
-    let value = Table.getRandomVariable state
+    let value = 
+      match Table.getRandomVariable state with
+      | None   -> "\"" + Variables.genString state + "\""
+      | Some s -> s
+
     let line = indentation + "print(" + value + ")"
     { state with
         lines=line::state.lines
@@ -98,6 +102,15 @@ module Statements =
         lines=line::state.lines
         table=Map.add name tablevalue (state.table)
     }
+
+  // let declareStatement line : Statement = 
+  //   let inner (instate : State) = 
+  //     { instate with
+  //         lines=line::instate.lines
+  //     }
+  //   inner
+
+
 
   let declareIf : Statement = 
     let inner (instate : State) = 
@@ -164,7 +177,7 @@ module Blocks =
 
   let makeIfelse : BlockStatement = 
     let inner depth = 
-      if depth <= 1 then
+      if depth <= 0 then
         makeVariable
       else
         (blockDummy depth =>> declareIf)
@@ -188,6 +201,13 @@ module Blocks =
     blockarr.[x]
 
 
+  let makeRandom(depth : int) : Statement = 
+    let x = rand.Next(0, 2)
+    if x = 0 then
+      randomBlock() |> fun b -> b (depth - 1)
+    else
+      randomStatement()
+
 
 
   // returns bool for if it's a recursive type
@@ -203,30 +223,46 @@ module Blocks =
 
   let makeBlocks depth state = 
 
-    let block = //(instate : State) = 
-      let x = state.rand.Next(0,20)
+    let block() = //(instate : State) = 
 
-      let (stmnt, isrec) = getRandomStatement state
-      if isrec then
-        makeIfelse (depth - 1)
-        // >.> addNewline
-        >.> blockDummy (depth - 1)
+      let x = rand.Next(1, 6)
+      List.init x (fun _ -> makeRandom(depth))
+      |> concat
 
-        // let st1 = (blockDummy (depth - 1)) =>> stmnt
-        // if x < 10 then
-        //   (blockDummy depth) >.> (makeVariable =>> st1)
-        // else
-        //   makeVariable =>> st1
 
-      else
-        // stmnt 
-       stmnt >.> blockDummy depth
+      // let x = rand.Next(0, 2)
+      // if x = 0 then
+      //   randomBlock() 
+      //   |> fun block -> block (depth - 1)
+      //   |> fun block -> blockDummy (depth - 1) =>> block
+      // else
+      //   randomStatement()
+      // makeRandom(depth)
+      // let x = state.rand.Next(0,20)
+
+
+
+      // let (stmnt, isrec) = getRandomStatement state
+      // if isrec then
+      //   makeIfelse (depth - 1)
+      //   // >.> addNewline
+      //   >.> blockDummy (depth - 1)
+
+      //   // let st1 = (blockDummy (depth - 1)) =>> stmnt
+      //   // if x < 10 then
+      //   //   (blockDummy depth) >.> (makeVariable =>> st1)
+      //   // else
+      //   //   makeVariable =>> st1
+
+      // else
+      //   // stmnt 
+      //  stmnt >.> blockDummy depth
       //  >.> addNewline
 
     if depth <= 0 then
       state
     else 
-      block state
+      block() |> fun b -> b state
 
   blockRef := makeBlocks
 
