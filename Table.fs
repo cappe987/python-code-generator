@@ -16,4 +16,12 @@ let tryFindBool state =
       let x = state.rand.Next(0, Array.length arr - 1)
       let (id, _) = arr.[x]
       Some id
+
+let getRandomVariable state = 
+  let x = state.rand.Next(0, Map.count state.table - 1)
+  Map.toArray state.table
+  |> fun arr -> arr.[x]
+  |> fun (id, _) -> id
+
+
     

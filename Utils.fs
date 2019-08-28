@@ -5,6 +5,13 @@ open System.IO
 open Types
 open Table
 
+let escapechar c = 
+  match c with
+  | '\\' -> ' ' 
+  | '\'' -> ' '
+  | '\"' -> ' '
+  | c    -> c
+
 let alphabet = ['A'..'Z'] @ ['a'..'z']
 
 let firstUpper (s : string) = 
@@ -17,7 +24,7 @@ let genRandomName state =
   let rec go() = 
     let x = state.rand.Next(0, 3000)
     let y = state.rand.Next(0, 3000)
-    let word = words.[x] + (firstUpper words.[y])
+    let word = words.[x].ToLower() + (firstUpper words.[y])
     if Map.containsKey word state.table then
       go()
     else
@@ -36,9 +43,9 @@ let initState =
 
 let genBool state = state.rand.Next(0,2) = 1
 
-let genInt state = state.rand.Next(-2147483647, 2147483647)
+let genInt state = state.rand.Next(-2147483647/2, 2147483647/2)
 
-let genChar state = char (state.rand.Next(32, 127))
+let genChar state = char (state.rand.Next(32, 127)) |> escapechar
 
 let genString state = 
   genRandomName state
@@ -68,10 +75,14 @@ let rec genBoolExpression state =
     | Some id -> id
     | None   -> string (genBool state)
 
-  | x -> failwithf "Invalid number generated @ genBoolExpression %d" x
+  | x -> failwithf "Invalid number generated @ genBoolExpression |%d|" x
 
 
+let addNewline state = {state with lines=""::state.lines}
 
+let indent state = {state with indent=state.indent+2}
+
+let outdent state = {state with indent=state.indent-2}
 
 let getRandomType state =
   let x = state.rand.Next(0, 4)
@@ -88,4 +99,6 @@ let getRandomType state =
   | x when x = 3 -> 
     let value = genInt state
     (Int value, string value)
-  | _ -> failwith "Invalid number generated @ getRandomType"
+  | x -> failwithf "Invalid number generated @ getRandomType |%d|" x
+
+

@@ -16,9 +16,9 @@ type Identifier = string
 //   | Types of Types
 //   | Id    of Identifier
 
-type Statements = 
-  | Function of Identifier * Identifier list
-  | If       of string
+// type Statements = 
+//   | Function of Identifier * Identifier list
+//   | If       of string
 
 
 
@@ -29,6 +29,10 @@ type State = {
   table  : Map<Identifier, Types>
 }
 
+type Statement = (State -> State)
 
+type StatementType = 
+  | Rec    of Statement
+  | Nonrec of Statement
 
 
