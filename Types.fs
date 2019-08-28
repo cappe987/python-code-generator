@@ -12,16 +12,6 @@ type Types =
 type Identifier = string
 
 
-// type Tokens = 
-//   | Types of Types
-//   | Id    of Identifier
-
-// type Statements = 
-//   | Function of Identifier * Identifier list
-//   | If       of string
-
-
-
 type State = {
   lines  : string list //Reverse the lines at the end
   indent : int

@@ -17,54 +17,14 @@ let writeToFile filename state =
 
 [<EntryPoint>]
 let main argv =
-  // let a = 
   let state = initState
-    // let b = decIf state (Recursive decIf ) 
-  // let c = declareVariable >>= decIf
-  // let b = followedBy declareVariable declareVariable
-  // let d = b >>= c
-  // let e = followedBy declareVariable declareVariable
-  // // b state 
-  // let f = fx
-  // let a = declareVariable >>= f
-  // let a = declareVariable >.> identity
-  // state
-  // |> a
 
-  makeBlocks 5 state
+  Blocks.makeBlocks 5 state
 
 
-  // |> returnS 
-  // declareVariable
-  // returnS {state with lines="\n\n"::state.lines}
-  // |> fun s -> s state
-  
-
-  // |> ifWith2Vars
-  // |> ((e >>= d) >>= decIf)
-
-
-
-    // decIf state b
-    // |> fun state -> decIf state declareVariable
-  // a
   // |> printCode
 
-  // initState
-  // |> declareVariable
-  // |> declareVariable
-  // |> declareVariable
-  // |> declareVariable
-  // |> declareIf 
-  // |> declareVariable
-  // |> declareVariable
   |> writeToFile "output.py"
-  // |> fun state -> {state with indent=state.indent+2}
-  // |> getIndent
-  // |> printfn "%A"
-  // |> fun state -> printfn "%A" state.lines
-
-
 
   0 
 
