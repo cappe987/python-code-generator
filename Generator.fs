@@ -79,6 +79,8 @@ module Monoid =
 
 module Statements = 
 
+  open Monoid
+
   let makePrint state = 
     let indentation = getIndent state
     let value = 
@@ -115,26 +117,31 @@ module Statements =
   let declareIf : Statement = 
     let inner (instate : State) = 
       let indentation = getIndent instate
-      let line = "\n" + indentation + "if " + Variables.genBoolExpression instate + ":"
+      // let line = "\n" + indentation + "if " + Variables.genBoolExpression instate + ":"
+      let line = indentation + "if " + Variables.genBoolExpression instate + ":"
 
       { instate with
           lines=line::instate.lines
       //     // indent=instate.indent+2
       }
-
+    addNewline 
+    >.> 
     inner
 
 
   let declareElse : Statement = 
     let inner (instate : State) = 
       let indentation = getIndent instate
-      let line = "\n" + indentation + "else" + ":"
+      // let line = "\n" + indentation + "else" + ":"
+      let line = indentation + "else" + ":"
 
       { instate with
           lines=line::instate.lines
       //     // indent=instate.indent+2
       }
 
+    addNewline 
+    >.> 
     inner
 
   let statementarr : Statement [] = 
@@ -166,7 +173,7 @@ module Blocks =
 
   let makeIf : BlockStatement = 
     let inner depth = 
-      if depth <= 1 then
+      if depth <= 0 then
         makeVariable
       else
         (blockDummy depth =>> declareIf)
@@ -212,12 +219,12 @@ module Blocks =
 
   // returns bool for if it's a recursive type
   // Replace with StatementType
-  let getRandomStatement state = 
-    let x = state.rand.Next(0, 10)
-    match x with
-    | x when x < 6 -> (declareIf, true)
-    // | x when x < 10 -> (makeVariable, false)
-    | x -> (makeVariable, false)
+  // let getRandomStatement state = 
+  //   let x = state.rand.Next(0, 10)
+  //   match x with
+  //   | x when x < 6 -> (declareIf, true)
+  //   // | x when x < 10 -> (makeVariable, false)
+  //   | x -> (makeVariable, false)
 
 
 

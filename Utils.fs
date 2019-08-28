@@ -82,7 +82,13 @@ module Variables =
 let initState = 
   {lines=[]; table=Map.empty; indent=0; rand=Random()}
 
-let addNewline state = {state with lines=""::state.lines}
+let addNewline state = 
+  match state.lines with
+  | x::_ when x = "" -> 
+    // {state with lines=x::xs}
+    state
+  | xs -> 
+    {state with lines=""::xs}
 
 let getIndent state = 
   let mutable res = ""
