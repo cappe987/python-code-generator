@@ -9,8 +9,14 @@
     <Compile Include="Types.fs" />
     <Compile Include="Table.fs" />
     <Compile Include="Utils.fs" />
+    <Compile Include="Code.fs" />
+    <Compile Include="Settings.fs" />
     <Compile Include="Generator.fs" />
     <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Data" Version="3.1.1" />
   </ItemGroup>
 
 </Project>
