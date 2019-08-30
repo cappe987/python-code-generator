@@ -16,6 +16,7 @@ let main argv =
 
   Issues:
     makeAssignment when no variables of type are available.
+    Handle division by zero?
 
 
 *)

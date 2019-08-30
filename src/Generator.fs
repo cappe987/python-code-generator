@@ -47,13 +47,13 @@ module Make =
 
 let run() = 
   Make.makeCode Settings.depth Utils.initState
-  |> Utils.writeToFile "output.py"
+  |> Utils.writeToFile "output/output.py"
 
 
 
 
     
-
+  
 
 
 

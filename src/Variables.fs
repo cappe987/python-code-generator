@@ -27,7 +27,7 @@ let firstUpper (s : string) =
 let nameCondition c = (List.contains c alphabet)
 
 let genRandomName state = 
-  let words = File.ReadAllLines("words.txt")
+  let words = File.ReadAllLines("data/words.txt")
   let rec go() = 
     let x = state.rand.Next(0, 3000)
     let y = state.rand.Next(0, 3000)

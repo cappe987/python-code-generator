@@ -1,13 +1,13 @@
 
 {
-  "depth" : 5,
+  "depth"       : 5,
 
-  "variable" : 1,
-  "print" : 1,
-  "assignment" : 1,
+  "variable"    : 1,
+  "print"       : 1,
+  "assignment"  : 1,
 
-  "if" : 1,
-  "ifelse" : 1
+  "if"          : 1,
+  "ifelse"      : 1
 
 
 }
