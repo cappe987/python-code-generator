@@ -2,29 +2,18 @@ module Table
 
 open Types
 
-let getType = 
-  function
-  | Bool   _ -> VarTypes.Bool
-  | Char   _ -> VarTypes.Char
-  | String _ -> VarTypes.String
-  | Int    _ -> VarTypes.Int
-  | List   _ -> VarTypes.List
-  | Function _ -> VarTypes.Function
 
-let matchType t1 t2 = getType t1 = getType t2 
-
-let isType t1 t2 = getType t1 = t2
 
 let randomFromArr (state) = 
   function
   | arr when Array.isEmpty arr -> None 
   | arr -> 
-    let x = state.rand.Next(0, Array.length arr - 1)
+    let x = state.rand.Next(0, Array.length arr)
     let (id, _) = arr.[x]
     Some id
 
 let randomArr(state, arr) = 
-  let x = state.rand.Next(0, Array.length arr - 1)
+  let x = state.rand.Next(0, Array.length arr)
   arr.[x]
   // let (id, _) = arr.[x]
   // id
@@ -52,9 +41,6 @@ let getRandomVarId state =
     | Some (id, _) -> Some id
 
     
-
-
-
-let updateTable state k v = 
-  Map.remove k state.table
-  |> Map.add k v
+// let updateTable state k v = 
+//   Map.remove k state.table
+//   |> Map.add k v

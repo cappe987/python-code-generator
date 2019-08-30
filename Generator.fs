@@ -14,7 +14,7 @@ module Make =
     Settings.settings
     |> Settings.getDistribution
 
-  let makeRandom(depth : int) : Statement = 
+  let makeRandomStatement(depth : int) : Statement = 
     let x = rand.Next(0, Array.length code)
     match code.[x] with
     | Statement s -> s
@@ -31,18 +31,23 @@ module Make =
     else 
       // block() |> fun b -> b state
       let total = Settings.maxStatements Settings.settings
-      let x = rand.Next(total/2, total)
-      List.init x (fun _ -> makeRandom(depth))
+      let x = state.rand.Next(total/2, total)
+      List.init x (fun _ -> makeRandomStatement(depth))
       |> Monoid.concat
       |> fun block -> block state
 
     // let block() = 
     //   let x = rand.Next(1, 6)
-    //   List.init x (fun _ -> makeRandom(depth))
+    //   List.init x (fun _ -> makeRandomStatement(depth))
     //   |> Monoid.concat
 
   Blocks.blockRef := makeCode
 
+
+
+let run() = 
+  Make.makeCode Settings.depth Utils.initState
+  |> Utils.writeToFile "output.py"
 
 
 

@@ -34,10 +34,6 @@ module Monoid =
     let inner (instate : State) = instate
     inner
 
-  let identityB : BlockStatement = 
-    let inner i instate =  instate
-    inner
-
   let concat l = 
     List.fold (>.>) identity l
 
@@ -106,19 +102,15 @@ module Statements =
           table=Map.add name tablevalue (state.table)
       }
 
-    let makeAssignment ofType state = 
-      let name = Table.getRandomVar state
-      match name with
-      | None -> state
-      | Some (id, t) -> 
-        let depth = state.rand.Next(1, 3)
-        let indent = getIndent state
-        // let ofType = Table.getType t
-        // let id = string id
-        let line = indent + id + " = " + (Variables.genExpression state ofType depth)
-        {state with 
-          lines=line::state.lines;
-        }
+    let makeAssignment id ofType state = 
+      let depth = state.rand.Next(1, 3)
+      let indent = getIndent state
+      // let ofType = Table.getType t
+      // let id = string id
+      let line = indent + id + " = " + (Variables.genExpression state ofType depth)
+      {state with 
+        lines=line::state.lines;
+      }
 
 
 
@@ -136,8 +128,11 @@ module Statements =
 
 
   let makeAssignment state = 
-    let ofType : VarTypes = Table.randomArr(state, Variables.varTypes)
-    OfType.makeAssignment ofType state
+    match Table.getRandomVar state with
+    | None -> OfType.makePrintOfStr "\"--- Assignment Placeholder ---\"" state
+    | Some (id, ofType) -> 
+      OfType.makeAssignment id (getType ofType) state
+    // let ofType : VarTypes = Table.randomArr(state, Variables.varTypes)
 
 
 
@@ -146,9 +141,11 @@ module Statements =
 
   let declareIf : Statement = 
     let inner (instate : State) = 
-      let indentation = getIndent instate
+      let indent = getIndent instate
       // let line = "\n" + indentation + "if " + Variables.genBoolExpression instate + ":"
-      let line = indentation + "if " + Variables.genBoolExpression instate + ":"
+      let depth = instate.rand.Next(1,5)
+      let line = 
+        indent + "if " + (Variables.genExpression instate (VarTypes.Bool) depth) + ":"
 
       { instate with
           lines=line::instate.lines
@@ -208,7 +205,9 @@ module Blocks =
   let makeIf : BlockStatement = 
     let inner depth = 
       if depth <= 0 then
-        identity
+        makeAssignment
+        // makePrint 
+        // identity
         // OfType.makePrintOfStr("------ Placeholder --------")
         // makeVariable
         // randomStatement()
@@ -222,7 +221,9 @@ module Blocks =
   let makeIfelse : BlockStatement = 
     let inner depth = 
       if depth <= 0 then
-        identity
+        makeAssignment
+        // makePrint 
+        // identity
         // OfType.makePrintOfStr("------ Placeholder --------")
         // makeVariable
         // randomStatement()

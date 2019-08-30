@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Include="Types.fs" />
     <Compile Include="Table.fs" />
+    <Compile Include="Variables.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Code.fs" />
     <Compile Include="Settings.fs" />

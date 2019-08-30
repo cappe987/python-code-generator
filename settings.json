@@ -2,12 +2,12 @@
 {
   "depth" : 5,
 
-  "variable" : 10,
-  "print" : 5,
-  "assignment" : 10,
+  "variable" : 1,
+  "print" : 1,
+  "assignment" : 1,
 
-  "if" : 0,
-  "ifelse" : 0
+  "if" : 1,
+  "ifelse" : 1
 
 
 }

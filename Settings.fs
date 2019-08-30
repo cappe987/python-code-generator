@@ -27,7 +27,7 @@ let codeStatements =
     ("ifelse", Block makeIfelse);
   |]
 
-let makeN n f =
+let multiply n f =
   Array.init n (fun _ -> f)
 
 
@@ -38,11 +38,11 @@ let parseSetting js str =
 
 let getDistribution js = 
   Array.map (fun (s, f) -> (f, parseSetting js s)) codeStatements
-  |> Array.collect (fun (f, i) -> makeN i f)
+  |> Array.collect (fun (f, i) -> multiply i f)
   
 
   
-let depth js = parseSetting js "depth"
+let depth = parseSetting settings "depth"
 
 let maxStatements js = 
   Array.sumBy (fun (s, _) -> parseSetting js s) codeStatements
