@@ -42,7 +42,12 @@ let getDistribution js =
   
 
   
-let depth = parseIntSetting settings "depth"
 
 let maxStatements js = 
   Array.sumBy (fun (s, _) -> parseIntSetting js s) codeStatements
+
+
+let depth = parseIntSetting settings "depth"
+
+let blocklengthMin = parseIntSetting settings "blocklength_min"
+let blocklengthMax = parseIntSetting settings "blocklength_max" + 1

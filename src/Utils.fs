@@ -42,3 +42,18 @@ let outdent state = {state with indent=state.indent-2}
 
 
 
+let rand = Random()
+
+let biasedRandom(min, max, bias) = 
+  // Bias level 
+  // 1..  = bias towards min
+  // 0..1 = bias towards max
+  // let exp = float 5
+
+  float min + (float (max - min)) * Math.Pow(rand.NextDouble(), bias)
+  |> int
+  |> fun d -> 
+    if min < 0 && d < 0 then
+      max + d
+    else
+      d

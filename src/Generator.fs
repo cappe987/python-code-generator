@@ -6,7 +6,7 @@ open Code.Statements
 open Code.Blocks
 
 
-let rand = System.Random()
+// let rand = System.Random()
 
 module Make = 
 
@@ -15,7 +15,7 @@ module Make =
     |> Settings.getDistribution
 
   let makeRandomStatement(depth : int) : Statement = 
-    let x = rand.Next(0, Array.length code)
+    let x = Utils.rand.Next(0, Array.length code)
     match code.[x] with
     | Statement s -> s
     | Block     s -> s (depth - 1)
@@ -30,8 +30,8 @@ module Make =
       state
     else 
       // block() |> fun b -> b state
-      let total = Settings.maxStatements Settings.settings
-      let x = state.rand.Next(total/2, total)
+      // let total = Settings.maxStatements Settings.settings
+      let x = state.rand.Next(Settings.blocklengthMin, Settings.blocklengthMax)
       List.init x (fun _ -> makeRandomStatement(depth))
       |> Monoid.concat
       |> fun block -> block state
@@ -53,7 +53,7 @@ let run() =
 
 
     
-  
+
 
 
 

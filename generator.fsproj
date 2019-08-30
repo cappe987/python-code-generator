@@ -8,8 +8,8 @@
   <ItemGroup>
     <Compile Include="src/Types.fs" />
     <Compile Include="src/Table.fs" />
-    <Compile Include="src/Variables.fs" />
     <Compile Include="src/Utils.fs" />
+    <Compile Include="src/Variables.fs" />
     <Compile Include="src/Code.fs" />
     <Compile Include="src/Settings.fs" />
     <Compile Include="src/Generator.fs" />
