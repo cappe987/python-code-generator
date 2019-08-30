@@ -12,6 +12,7 @@ let main argv =
 
 
 (*
+  Make better folder structure
 
   Issues:
     makeAssignment when no variables of type are available.

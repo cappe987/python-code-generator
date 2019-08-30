@@ -6,14 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Types.fs" />
-    <Compile Include="Table.fs" />
-    <Compile Include="Variables.fs" />
-    <Compile Include="Utils.fs" />
-    <Compile Include="Code.fs" />
-    <Compile Include="Settings.fs" />
-    <Compile Include="Generator.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="src/Types.fs" />
+    <Compile Include="src/Table.fs" />
+    <Compile Include="src/Variables.fs" />
+    <Compile Include="src/Utils.fs" />
+    <Compile Include="src/Code.fs" />
+    <Compile Include="src/Settings.fs" />
+    <Compile Include="src/Generator.fs" />
+    <Compile Include="src/Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
