@@ -31,18 +31,18 @@ let multiply n f =
   Array.init n (fun _ -> f)
 
 
-let parseSetting js str = 
+let parseIntSetting js str = 
   match JsonExtensions.TryGetProperty (js, str) with
-  | None -> failwithf "Invalid setting |%s|" str
+  | None -> failwithf "Setting \"%s\" not found" str
   | Some i -> i.AsInteger()
 
 let getDistribution js = 
-  Array.map (fun (s, f) -> (f, parseSetting js s)) codeStatements
+  Array.map (fun (s, f) -> (f, parseIntSetting js s)) codeStatements
   |> Array.collect (fun (f, i) -> multiply i f)
   
 
   
-let depth = parseSetting settings "depth"
+let depth = parseIntSetting settings "depth"
 
 let maxStatements js = 
-  Array.sumBy (fun (s, _) -> parseSetting js s) codeStatements
+  Array.sumBy (fun (s, _) -> parseIntSetting js s) codeStatements

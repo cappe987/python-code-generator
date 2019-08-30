@@ -16,7 +16,5 @@ let main argv =
   Issues:
     makeAssignment when no variables of type are available.
 
-  Replace genBoolExpression with genExpression
-
 
 *)
