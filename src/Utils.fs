@@ -22,7 +22,6 @@ let writeToFile filename state =
 let addNewline state = 
   match state.lines with
   | x::_ when x = "" -> 
-    // {state with lines=x::xs}
     state
   | xs -> 
     {state with lines=""::xs}

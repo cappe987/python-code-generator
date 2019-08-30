@@ -50,21 +50,6 @@ let genString state =
 
 let genConnective state = if state.rand.Next(0,2) = 1 then " and " else " or "
 
-// let rec genBoolExpression state = 
-//   let x = state.rand.Next(0,10)
-//   match x with
-//   | x when x >= 0  && x < 4-> 
-//     genBoolExpression state + (genConnective state) + genBoolExpression state
-
-//   | x when x >= 4 && x <= 6 -> 
-//     string (genBool state)
-
-//   | x when x > 6 && x < 10 -> 
-//     match getVarOfType (state, VarTypes.Bool) with
-//     | Some id -> id
-//     | None   -> string (genBool state)
-
-//   | x -> failwithf "Invalid number generated @ genBoolExpression |%d|" x
 
 let genTypeValue ofType state = 
   match ofType with
@@ -91,10 +76,7 @@ let genRandomType state =
   let ofType : VarTypes = Table.randomArr(state, varTypes)
   genTypeValue ofType state
 
-// let genAssignment state = 
-//   match getRandomVarWithValue state with
-//   | None     -> None
-//   | Some (var,t) -> 
+
 
 let connective state t = 
   match t with

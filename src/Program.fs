@@ -1,5 +1,5 @@
 ﻿
-open System
+// open System
 
 
 [<EntryPoint>]
@@ -13,11 +13,12 @@ let main argv =
 
 
 (*
-  Make better folder structure
-  Biased number generator for lower numbers.
+  Make use of the biased number generator
 
   Issues:
     makeAssignment when no variables of type are available.
+    Replace makeAssignment placeholder
+
     Handle division by zero?
 
 

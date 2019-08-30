@@ -15,8 +15,7 @@ let randomFromArr (state) =
 let randomArr(state, arr) = 
   let x = state.rand.Next(0, Array.length arr)
   arr.[x]
-  // let (id, _) = arr.[x]
-  // id
+
 
 let getVarOfType(state, t1) = 
   Map.filter (fun k t -> isType t t1) state.table
@@ -39,8 +38,3 @@ let getRandomVarId state =
   |> function
     | None -> None
     | Some (id, _) -> Some id
-
-    
-// let updateTable state k v = 
-//   Map.remove k state.table
-//   |> Map.add k v

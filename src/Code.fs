@@ -53,26 +53,6 @@ module Monoid =
     (inner, blockRef)
 
 
-  // let fx (state : State) : Statement = 
-  //   let inner (instate : State) = 
-  //     {state with lines="\n\n"::instate.lines}
-  //   inner
-
-
-  // let returnS (state : State) : Statement = 
-  //   let inner (_ : State) = state
-  //   inner
-
-
-  // let bind (f : State -> Statement) (st1 : Statement) : Statement = 
-  //   let inner (instate : State) = 
-  //     st1 instate
-  //     |> f instate
-    
-  //   inner
-
-  // let ( >>= ) st1 f = bind f st1
-
 
 
 
@@ -92,7 +72,6 @@ module Statements =
 
     let makeVariable ofType state = 
       let name = Variables.genRandomName state
-      // let (tablevalue, value) = Variables.getRandomType state
       let (tablevalue, value) = Variables.genTypeValue ofType state
       let indentation = getIndent state
       let line = indentation + name + " = " + value 
@@ -105,8 +84,6 @@ module Statements =
     let makeAssignment id ofType state = 
       let depth = state.rand.Next(1, 3)
       let indent = getIndent state
-      // let ofType = Table.getType t
-      // let id = string id
       let line = indent + id + " = " + (Variables.genExpression state ofType depth)
       {state with 
         lines=line::state.lines;
@@ -132,7 +109,6 @@ module Statements =
     | None -> OfType.makePrintOfStr "\"--- Assignment Placeholder ---\"" state
     | Some (id, ofType) -> 
       OfType.makeAssignment id (getType ofType) state
-    // let ofType : VarTypes = Table.randomArr(state, Variables.varTypes)
 
 
 
@@ -142,14 +118,12 @@ module Statements =
   let declareIf : Statement = 
     let inner (instate : State) = 
       let indent = getIndent instate
-      // let line = "\n" + indentation + "if " + Variables.genBoolExpression instate + ":"
       let depth = instate.rand.Next(1,5)
       let line = 
         indent + "if " + (Variables.genExpression instate (VarTypes.Bool) depth) + ":"
 
       { instate with
           lines=line::instate.lines
-      //     // indent=instate.indent+2
       }
     addNewline 
     >.> 
@@ -159,12 +133,10 @@ module Statements =
   let declareElse : Statement = 
     let inner (instate : State) = 
       let indentation = getIndent instate
-      // let line = "\n" + indentation + "else" + ":"
       let line = indentation + "else" + ":"
 
       { instate with
           lines=line::instate.lines
-      //     // indent=instate.indent+2
       }
 
     addNewline 
@@ -196,7 +168,6 @@ module Blocks =
 
 
 
-  // let ifWith2Vars = (makeVariable >.> makeVariable) =>> declareIf
 
   let (blockDummy, blockRef) = createDummy()
 
