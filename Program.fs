@@ -20,7 +20,8 @@ let main argv =
   printfn "Starting..."
   let state = initState
 
-  Blocks.makeBlocks 5 state
+  Make.makeCode 5 state
+
 
   |> writeToFile "output.py"
 
@@ -29,12 +30,9 @@ let main argv =
 
 
 (*
-  Handle backslashes and other special chars in strings/chars
-  Monads?
-  Combinator?
+  Make a settings.json that reads how many of each statements 
+  can be picked.
 
-
-  Pass in what the if-statement should contain
-
+  Use type code to make one array of both statements and blocks.
 
 *)

@@ -2,12 +2,21 @@ module Types
 
 open System
 
+type VarTypes =
+  | Bool 
+  | String
+  | Char
+  | Int
+  | List
+  | Function
+
 type Types = 
   | Bool   of bool
   | String of string
   | Char   of char
   | Int    of int
   | List   of Types list
+  | Function of Types * Types list
 
 type Identifier = string
 
@@ -23,8 +32,7 @@ type Statement = (State -> State)
 
 type BlockStatement = (int -> State -> State)
 
-type StatementType = 
-  | Rec    of Statement
-  | Nonrec of Statement
-
+type Code = 
+  | Statement of Statement
+  | Block     of BlockStatement
 

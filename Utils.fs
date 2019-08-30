@@ -6,6 +6,13 @@ open Types
 open Table
 
 module Variables = 
+
+  let varTypes : VarTypes [] = 
+    [|VarTypes.Bool; VarTypes.Int; VarTypes.String; VarTypes.Char |]
+
+
+  let intOperators = [|"+"; "-"; "*"; "%"; "/";|]
+ 
   let escapechar c = 
     match c with
     | '\\' -> ' ' 
@@ -54,28 +61,65 @@ module Variables =
       string (genBool state)
 
     | x when x > 6 && x < 10 -> 
-      match tryFindBool state with
+      match getVarOfType (state, VarTypes.Bool) with
       | Some id -> id
       | None   -> string (genBool state)
 
     | x -> failwithf "Invalid number generated @ genBoolExpression |%d|" x
 
-  let getRandomType state =
-    let x = state.rand.Next(0, 4)
-    match x with
-    | x when x = 0 -> 
+  let genTypeValue ofType state = 
+    match ofType with
+    | VarTypes.Bool -> 
       let value = genBool state
       (Bool value, string value)
-    | x when x = 1 -> 
+    | VarTypes.String -> 
       let value = genString state
       (String value, "\"" + value + "\"")
-    | x when x = 2 -> 
+    | VarTypes.Char -> 
       let value = genChar state
       (Char value, "\'" + string value + "\'")
-    | x when x = 3 -> 
+    | VarTypes.Int -> 
       let value = genInt state
       (Int value, string value)
-    | x -> failwithf "Invalid number generated @ getRandomType |%d|" x
+    | x -> failwithf "Invalid type @ genTypeValue |%A|" x
+
+
+  let genRandomType state =
+    let ofType : VarTypes = Table.randomArr(state, varTypes)
+    genTypeValue ofType state
+
+  // let genAssignment state = 
+  //   match getRandomVarWithValue state with
+  //   | None     -> None
+  //   | Some (var,t) -> 
+
+  let connective state t = 
+    match t with
+    | VarTypes.Bool   -> genConnective state
+    | VarTypes.Int    -> randomArr(state, intOperators)
+    | VarTypes.String -> "+"
+    | VarTypes.Char   -> "+"
+    | VarTypes.List   -> "+"
+    | VarTypes.Function   -> failwith "No connective for Function"
+
+  let genExpression (state : State) (ofType : VarTypes) (depth : int) = 
+    // let ofType : VarTypes = randomArr(state, varTypes)
+    let rec go (depth) = 
+      if depth = 0 then
+        match getVarOfType (state, ofType) with
+        | None -> ""
+        | Some id -> id
+      else
+        match getVarOfType (state, ofType) with
+        | None -> ""
+        | Some id -> 
+          id + " " + connective state ofType + " " + go (depth - 1)
+
+    go (depth)
+
+
+
+
 
 
 
