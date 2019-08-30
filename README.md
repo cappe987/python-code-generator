@@ -1,6 +1,6 @@
 # Python code generator
 
-An F# combinator to generate randomized Python code.
+An F# combinator to generate randomized Python code. [View example output.](output/example.py)
 
 The parameters can be adjusted in `settings.json`. 
 
