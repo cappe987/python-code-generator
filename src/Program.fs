@@ -15,11 +15,15 @@ let main argv =
 (*
   Make use of the biased number generator
 
+  Improve boolean expressions?
+
   Issues:
     makeAssignment when no variables of type are available.
     Replace makeAssignment placeholder
 
     Handle division by zero?
+  
+  
 
 
 *)

@@ -29,8 +29,9 @@ let nameCondition c = (List.contains c alphabet)
 let genRandomName state = 
   let words = File.ReadAllLines("data/words.txt")
   let rec go() = 
-    let x = state.rand.Next(0, 3000)
-    let y = state.rand.Next(0, 3000)
+    let len = Array.length words
+    let x = state.rand.Next(0, len)
+    let y = state.rand.Next(0, len)
     let word = words.[x].ToLower() + (firstUpper words.[y])
     if Map.containsKey word state.table then
       go()

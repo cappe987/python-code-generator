@@ -8,11 +8,6 @@ open Types
 open Code.Statements
 open Code.Blocks
 
-let (|Int|_|) (s : string) =
-    match Int32.TryParse s with
-    | true, x -> Some x
-    | _       -> None
-
 let settings = 
   File.ReadAllText("settings.json")
   |> JsonValue.Parse

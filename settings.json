@@ -4,12 +4,12 @@
   "blocklength_min" : 3,
   "blocklength_max" : 5,
 
-  "variable"    : 10,
-  "print"       : 10,
-  "assignment"  : 10,
+  "variable"    : 1,
+  "print"       : 1,
+  "assignment"  : 1,
 
-  "if"          : 10,
-  "ifelse"      : 10
+  "if"          : 1,
+  "ifelse"      : 1
 
 
 }

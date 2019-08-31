@@ -19,6 +19,20 @@ let writeToFile filename state =
   |> List.rev
   |> fun arr -> File.WriteAllLines(filename, arr)
 
+
+let writeLineTimer filename state = 
+  let rec go(xs) =
+    match xs with
+    | [] -> ()
+    | x::xs ->
+      File.AppendAllText(filename, x + "\n") 
+      Threading.Thread.Sleep(50)
+      go (xs)
+  File.WriteAllText(filename, "")
+  Console.ReadLine() |> ignore
+  go (List.rev state.lines)
+
+
 let addNewline state = 
   match state.lines with
   | x::_ when x = "" -> 

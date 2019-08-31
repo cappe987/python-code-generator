@@ -36,6 +36,7 @@ module Make =
 let run() = 
   Make.makeCode Settings.depth Utils.initState
   |> Utils.writeToFile "output/output.py"
+  // |> Utils.writeLineTimer "output/output.py"
 
 
 
