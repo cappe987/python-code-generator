@@ -24,3 +24,4 @@ Code is by default outputted to `output/output.py`.
 - [ ] Clean up Variables.fs
 - [ ] Comparative expressions (`<`, `>`, `==`, `<=`, `>=`) and overall better boolean expressions
 - [ ] Overall more human-like code
+- [ ] Monad of Code type
