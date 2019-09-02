@@ -5,8 +5,8 @@ open System.IO
 open Types
 open Table
 
-let varTypes : VarTypes [] =
-  [|VarTypes.Bool; VarTypes.Int; VarTypes.String; VarTypes.Char |]
+let typeArr : Types [] =
+  [|Bool; Int; String; Char |]
 
 
 let intOperators = [|"+"; "-"; "*"; "%"; "/";|]
@@ -54,44 +54,44 @@ let genConnective state = if state.rand.Next(0,2) = 1 then " and " else " or "
 
 let genTypeValue ofType state = 
   match ofType with
-  | VarTypes.Bool -> 
+  | Bool -> 
     let value = genBool state
-    (Bool value, string value)
+    (Bool , string value)
 
-  | VarTypes.String -> 
+  | String -> 
     let value = genString state
-    (String value, "\"" + value + "\"")
+    (String , "\"" + value + "\"")
 
-  | VarTypes.Char -> 
+  | Char -> 
     let value = genChar state
-    (Char value, "\'" + string value + "\'")
+    (Char , "\'" + string value + "\'")
 
-  | VarTypes.Int -> 
+  | Int -> 
     let value = genInt state
-    (Int value, string value)
+    (Int , string value)
 
   | x -> failwithf "Invalid type @ genTypeValue |%A|" x
 
 
 let genRandomType state =
-  let ofType : VarTypes = Table.randomArr(state, varTypes)
+  let ofType = Table.randomArr(state, typeArr)
   genTypeValue ofType state
 
 
 
 let connective state t = 
   match t with
-  | VarTypes.Bool   -> genConnective state
-  | VarTypes.Int    -> randomArr(state, intOperators)
-  | VarTypes.String -> "+"
-  | VarTypes.Char   -> "+"
-  | VarTypes.List   -> "+"
-  | VarTypes.Function   -> failwith "No connective for Function"
+  | Bool   -> genConnective state
+  | Int    -> randomArr(state, intOperators)
+  | String -> "+"
+  | Char   -> "+"
+  | List   -> "+"
+  | Function -> failwith "No connective for Function"
 
 
 
 
-let genExpression (state : State) (ofType : VarTypes) (depth : int) = 
+let genExpression (state : State) (ofType : Types) (depth : int) = 
   // let ofType : VarTypes = randomArr(state, varTypes)
   let rec go (depth) = 
     if depth = 0 then

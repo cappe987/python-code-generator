@@ -100,7 +100,7 @@ module Statements =
 
 
   let makeVariable state = 
-    let ofType : VarTypes = Table.randomArr(state, Variables.varTypes)
+    let ofType = Table.randomArr(state, Variables.typeArr)
     OfType.makeVariable ofType state
 
 
@@ -108,7 +108,7 @@ module Statements =
     match Table.getRandomVar state with
     | None -> OfType.makePrintOfStr "\"--- Assignment Placeholder ---\"" state
     | Some (id, ofType) -> 
-      OfType.makeAssignment id (getType ofType) state
+      OfType.makeAssignment id ofType state
 
 
 
@@ -120,7 +120,7 @@ module Statements =
       let indent = getIndent instate
       let depth = instate.rand.Next(1,5)
       let line = 
-        indent + "if " + (Variables.genExpression instate (VarTypes.Bool) depth) + ":"
+        indent + "if " + (Variables.genExpression instate Bool depth) + ":"
 
       { instate with
           lines=line::instate.lines

@@ -18,7 +18,7 @@ let randomArr(state, arr) =
 
 
 let getVarOfType(state, t1) = 
-  Map.filter (fun k t -> isType t t1) state.table
+  Map.filter (fun k t -> t = t1) state.table
   |> Map.toArray
   |> randomFromArr (state)
 
