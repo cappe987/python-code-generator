@@ -3,6 +3,8 @@
   "depth"       : 5,
   "blocklength_min" : 3,
   "blocklength_max" : 5,
+  "conditionlength_min" : 1,
+  "conditionlength_max" : 3,
 
   "variable"    : 1,
   "print"       : 1,

@@ -40,34 +40,35 @@ let genRandomName state =
   go()
 
 
-let genBool state = state.rand.Next(0,2) = 1
+let genBool (state) = state.rand.Next(0,2) = 1
 
-let genInt state = state.rand.Next(-2147483647/2, 2147483647/2)
+let genInt (state) = Utils.biasedRandom(-2147483647/2, 2147483647/2, 20.0)
+  //state.rand.Next(-2147483647/2, 2147483647/2)
 
-let genChar state = char (state.rand.Next(32, 127)) |> escapechar
+let genChar (state) = char (state.rand.Next(32, 127)) |> escapechar
 
-let genString state = 
+let genString (state) = 
   genRandomName state
 
 let genConnective state = if state.rand.Next(0,2) = 1 then " and " else " or "
 
 
-let genTypeValue ofType state = 
+let genTypeValue (ofType, state) = 
   match ofType with
   | Bool -> 
-    let value = genBool state
+    let value = genBool (state)
     (Bool , string value)
 
   | String -> 
-    let value = genString state
+    let value = genString (state)
     (String , "\"" + value + "\"")
 
   | Char -> 
-    let value = genChar state
+    let value = genChar (state)
     (Char , "\'" + string value + "\'")
 
   | Int -> 
-    let value = genInt state
+    let value = genInt (state)
     (Int , string value)
 
   | x -> failwithf "Invalid type @ genTypeValue |%A|" x
@@ -75,7 +76,7 @@ let genTypeValue ofType state =
 
 let genRandomType state =
   let ofType = Table.randomArr(state, typeArr)
-  genTypeValue ofType state
+  genTypeValue (ofType, state)
 
 
 
@@ -89,27 +90,45 @@ let connective state t =
   | Function -> failwith "No connective for Function"
 
 
+let comparative (state) = 
+  match state.rand.Next(0,4) with
+  | i when i = 0 -> "=="
+  | i when i = 1 -> ">"
+  | i when i = 2 -> "<"
+  | i when i = 3 -> "<="
+  | _ ->  ">="
+
+
+
+
+// Returns a string in the form of a value or a variablename of ofType
+let genValue(state, ofType) = 
+  match getVarOfType (state, ofType) with
+  | None -> 
+    genTypeValue (ofType, state)
+    |> fun (_,v) -> v
+  | Some id -> 
+    if state.rand.Next(0, 3) = 0 then
+      id 
+    else
+      genTypeValue (ofType, state)
+      |> fun (_, v) -> v
+      
+
+let genBoolExpr (state) = 
+  genValue(state, Int) + " " + comparative(state) + " " +  genValue(state, Int)
+
 
 
 let genExpression (state : State) (ofType : Types) (depth : int) = 
   // let ofType : VarTypes = randomArr(state, varTypes)
   let rec go (depth) = 
     if depth = 0 then
-      match getVarOfType (state, ofType) with
-      | None -> 
-        let (_, value) = genTypeValue ofType state
-        value
-      | Some id -> id
+      genValue(state, ofType)
     else
-      match getVarOfType (state, ofType) with
-      | None -> 
-        let (_, value) = genTypeValue ofType state
-        value
-      | Some id -> 
-        if state.rand.Next(0, 3) = 0 then
-          id + " " + connective state ofType + " " + go (depth - 1)
-        else
-          let (_, value) = genTypeValue ofType state
-          value + " " + connective state ofType + " " + go (depth - 1)
+      if ofType = Bool then
+        genBoolExpr state + " " + connective state ofType + " " + go (depth - 1)
+      else
+      genValue(state, ofType) + " " + connective state ofType + " " + go (depth - 1)
 
   go (depth)

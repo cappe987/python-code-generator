@@ -72,7 +72,7 @@ module Statements =
 
     let makeVariable ofType state = 
       let name = Variables.genRandomName state
-      let (tablevalue, value) = Variables.genTypeValue ofType state
+      let (tablevalue, value) = Variables.genTypeValue (ofType  , state)
       let indentation = getIndent state
       let line = indentation + name + " = " + value 
 
@@ -118,7 +118,8 @@ module Statements =
   let declareIf : Statement = 
     let inner (instate : State) = 
       let indent = getIndent instate
-      let depth = instate.rand.Next(1,5)
+      let depth = 
+        instate.rand.Next(Settings.conditionlengthMin,Settings.conditionlengthMax)
       let line = 
         indent + "if " + (Variables.genExpression instate Bool depth) + ":"
 
