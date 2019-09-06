@@ -54,35 +54,42 @@ module Make =
 
   Blocks.blockRef := makeCode
 
-  let makeFunction : BlockStatement = 
 
-    let inner depth = 
-      let paramcount = 
-        Utils.rand.Next(Settings.parametercountMin, Settings.parametercountMax)
-        
-      let vars state = 
-        List.init paramcount (fun _ -> (
-                                        Table.randomArr(Variables.typeArr),
-                                        Variables.genString(state))
-                                        )
-      let varnames state = Variables.makeFuncVarnames (vars state)
-
-      let declareFuncVars (instate : State) = 
-        {instate with
-          table= List.fold (fun m (t, s) -> Map.add s t m) instate.table (vars instate)
-        }
-
-      let declareFunction (instate : State) = 
-        let name = Variables.genString(instate)
-        let line = "def " + name + "(" + varnames instate + ")"+ ":"
-
-        {instate with
-          lines=line::instate.lines;
-        }
-
-      (declareFuncVars >.> (makeCode depth)) =>> declareFunction
+  let funcParts state = 
+    let paramcount = 
+      Utils.rand.Next(Settings.parametercountMin, Settings.parametercountMax)
       
-          // (blockDummy depth =>> declareFunction)
+    let vars = List.init paramcount (fun _ -> (
+                                              Table.randomArr(Variables.typeArr),
+                                              Variables.genString(state))
+                                              )
+    let varnames = Variables.makeFuncVarnames vars
+
+    let declareFuncVars (instate : State) = 
+      {instate with
+        table= List.fold (fun m (t, s) -> Map.add s t m) instate.table vars
+      }
+
+    let declareFunction (instate : State) = 
+      let name = Variables.genString(instate)
+      let line = "def " + name + "(" + varnames + ")"+ ":"
+
+      {instate with
+        lines=line::instate.lines;
+      }
+    
+    (declareFuncVars, declareFunction)
+
+
+  let makeFunction depth = 
+
+    let inner state = 
+      let (declareFuncVars, declareFunction) = funcParts state
+      (declareFuncVars >.> (makeCode depth)) =>> declareFunction
+      |> fun statement -> statement state 
+      |> Utils.addNewline
+      |> fun state -> {state with lines=""::""::state.lines}
+
     inner 
 
 
