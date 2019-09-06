@@ -3,6 +3,7 @@ module Table
 open Types
 
 
+let rand = System.Random()
 
 let randomFromArr (state) = 
   function
@@ -12,8 +13,8 @@ let randomFromArr (state) =
     let (id, _) = arr.[x]
     Some id
 
-let randomArr(state, arr) = 
-  let x = state.rand.Next(0, Array.length arr)
+let randomArr(arr) = 
+  let x = rand.Next(0, Array.length arr)
   arr.[x]
 
 

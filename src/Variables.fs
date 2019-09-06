@@ -74,8 +74,8 @@ let genTypeValue (ofType, state) =
   | x -> failwithf "Invalid type @ genTypeValue |%A|" x
 
 
-let genRandomType state =
-  let ofType = Table.randomArr(state, typeArr)
+let genRandomType (state) =
+  let ofType = Table.randomArr(typeArr)
   genTypeValue (ofType, state)
 
 
@@ -83,7 +83,7 @@ let genRandomType state =
 let connective state t = 
   match t with
   | Bool   -> genConnective state
-  | Int    -> randomArr(state, intOperators)
+  | Int    -> randomArr(intOperators)
   | String -> "+"
   | Char   -> "+"
   | List   -> "+"
@@ -132,3 +132,11 @@ let genExpression (state : State) (ofType : Types) (depth : int) =
       genValue(state, ofType) + " " + connective state ofType + " " + go (depth - 1)
 
   go (depth)
+
+
+let makeFuncVarnames vars = 
+  let len = List.length vars - 1
+  List.mapi (fun i (_, s) -> 
+    if i = len then s
+    else s + ", ") vars
+  |> List.fold (+) ""

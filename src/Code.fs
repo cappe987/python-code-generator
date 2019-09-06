@@ -100,7 +100,7 @@ module Statements =
 
 
   let makeVariable state = 
-    let ofType = Table.randomArr(state, Variables.typeArr)
+    let ofType = Table.randomArr(Variables.typeArr)
     OfType.makeVariable ofType state
 
 

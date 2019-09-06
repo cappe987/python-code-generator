@@ -5,6 +5,7 @@ open Code
 open Code.Statements
 open Code.Blocks
 open Settings
+open Monoid
 
 
 module Make = 
@@ -50,12 +51,54 @@ module Make =
       |> fun block -> block state
 
 
+
   Blocks.blockRef := makeCode
+
+  let makeFunction : BlockStatement = 
+
+    let inner depth = 
+      let paramcount = 
+        Utils.rand.Next(Settings.parametercountMin, Settings.parametercountMax)
+        
+      let vars state = 
+        List.init paramcount (fun _ -> (
+                                        Table.randomArr(Variables.typeArr),
+                                        Variables.genString(state))
+                                        )
+      let varnames state = Variables.makeFuncVarnames (vars state)
+
+      let declareFuncVars (instate : State) = 
+        {instate with
+          table= List.fold (fun m (t, s) -> Map.add s t m) instate.table (vars instate)
+        }
+
+      let declareFunction (instate : State) = 
+        let name = Variables.genString(instate)
+        let line = "def " + name + "(" + varnames instate + ")"+ ":"
+
+        {instate with
+          lines=line::instate.lines;
+        }
+
+      (declareFuncVars >.> (makeCode depth)) =>> declareFunction
+      
+          // (blockDummy depth =>> declareFunction)
+    inner 
+
+
+
+
+  let makeFuncs depth state = 
+    List.init functioncount (fun _ -> makeFunction depth)
+    |> Monoid.concat
+    |> fun block -> block state
 
 
 
 let run() = 
-  Make.makeCode Settings.depth Utils.initState
+  // Make.makeCode Settings.depth Utils.initState
+  Make.makeFuncs Settings.depth Utils.initState
+  // makeIf Settings.depth Utils.initState
   |> Utils.writeToFile "output/output.py"
   // |> Utils.writeLineTimer "output/output.py"
 

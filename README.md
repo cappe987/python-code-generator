@@ -15,13 +15,13 @@ Code is by default outputted to `output/output.py`.
 # To-do list
 - [x] `if` and `else` statements
 - [x] Assignment expressions
+- [X] More reasonable integers
+- [X] Comparative expressions (`<`, `>`, `==`, `<=`, `>=`) and overall better boolean expressions
 - [ ] More syntax (`for`, `while`, etc.)
 - [ ] Functions
 - [ ] More settings (occurrance of types, length of blocks, expression depth)
-- [ ] More reasonable integers
 - [ ] Floats
 - [ ] Remove char type and integrate it into strings
 - [ ] Clean up Variables.fs
-- [ ] Comparative expressions (`<`, `>`, `==`, `<=`, `>=`) and overall better boolean expressions
 - [ ] Overall more human-like code
 - [ ] Monad of Code type
