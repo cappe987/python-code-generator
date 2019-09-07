@@ -23,10 +23,8 @@ let main argv =
     Handle division by zero?
 
     Funtions not returning anything
-    Functions using non-existant variables.
-    The `vars` generated are different from `varnames` because 
-      of different states.
   
+  Make function calls
   
 
 

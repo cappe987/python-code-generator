@@ -64,6 +64,8 @@ module Make =
                                               Variables.genString(state))
                                               )
     let varnames = Variables.makeFuncVarnames vars
+    let name = Variables.genString(state)
+    let signature = (name, List.map (fun (t, _) -> t) vars)
 
     let declareFuncVars (instate : State) = 
       {instate with
@@ -71,24 +73,28 @@ module Make =
       }
 
     let declareFunction (instate : State) = 
-      let name = Variables.genString(instate)
       let line = "def " + name + "(" + varnames + ")"+ ":"
 
       {instate with
         lines=line::instate.lines;
       }
     
-    (declareFuncVars, declareFunction)
+    (declareFuncVars, signature, declareFunction)
 
 
   let makeFunction depth = 
 
     let inner state = 
-      let (declareFuncVars, declareFunction) = funcParts state
+      let (declareFuncVars, (name, parameters), declareFunction) = funcParts state
       (declareFuncVars >.> (makeCode depth)) =>> declareFunction
       |> fun statement -> statement state 
       |> Utils.addNewline
-      |> fun state -> {state with lines=""::""::state.lines}
+      |> fun state -> 
+        { state with 
+            lines=""::""::state.lines
+            table=Map.add name (Function parameters) state.table
+        }
+      // Add the function name/parameters to the table.
 
     inner 
 
@@ -105,6 +111,7 @@ module Make =
 let run() = 
   // Make.makeCode Settings.depth Utils.initState
   Make.makeFuncs Settings.depth Utils.initState
+  |> Make.makeCode Settings.depth
   // makeIf Settings.depth Utils.initState
   |> Utils.writeToFile "output/output.py"
   // |> Utils.writeLineTimer "output/output.py"

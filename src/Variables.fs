@@ -71,7 +71,7 @@ let genTypeValue (ofType, state) =
     let value = genInt (state)
     (Int , string value)
 
-  | x -> failwithf "Invalid type @ genTypeValue |%A|" x
+  | Function _ -> failwithf "Can't generate function @ genTypeValue"
 
 
 let genRandomType (state) =
@@ -86,8 +86,8 @@ let connective state t =
   | Int    -> randomArr(intOperators)
   | String -> "+"
   | Char   -> "+"
-  | List   -> "+"
-  | Function -> failwith "No connective for Function"
+  // | List   -> "+"
+  | Function _ -> failwith "No connective for Function"
 
 
 let comparative (state) = 

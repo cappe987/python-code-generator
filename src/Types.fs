@@ -15,8 +15,8 @@ type Types =
   | String //of string
   | Char   //of char
   | Int    //of int
-  | List   //of Types list
-  | Function //of Types * Types list
+  // | List   //of Types list
+  | Function of Types list
 
 type Identifier = string
 
@@ -49,4 +49,10 @@ type Code =
 
 // let matchType t1 t2 = getType t1 = getType t2 
 
-// let isType t1 t2 = getType t1 = t2
+let isType t1 t2 = 
+  match t1 with
+  | Function _ -> 
+    match t2 with 
+    | Function _ -> true
+    | x -> t1 = x
+  | y -> y = t2
