@@ -24,7 +24,7 @@ type Identifier = string
 type State = {
   lines  : string list //Reverse the lines at the end
   indent : int
-  rand   : Random
+  // rand   : Random
   table  : Map<Identifier, Types>
 }
 

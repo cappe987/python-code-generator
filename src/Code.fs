@@ -82,7 +82,7 @@ module Statements =
       }
 
     let makeAssignment id ofType state = 
-      let depth = state.rand.Next(1, 3)
+      let depth = Table.rand.Next(1, 3)
       let indent = getIndent state
       let line = indent + id + " = " + (Variables.genExpression state ofType depth)
       {state with 
@@ -119,7 +119,7 @@ module Statements =
     let inner (instate : State) = 
       let indent = getIndent instate
       let depth = 
-        instate.rand.Next(Settings.conditionlengthMin,Settings.conditionlengthMax)
+        Table.rand.Next(Settings.conditionlengthMin,Settings.conditionlengthMax)
       let line = 
         indent + "if " + (Variables.genExpression instate Bool depth) + ":"
 

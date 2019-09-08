@@ -30,8 +30,8 @@ let genRandomName state =
   let words = File.ReadAllLines("data/words.txt")
   let rec go() = 
     let len = Array.length words
-    let x = state.rand.Next(0, len)
-    let y = state.rand.Next(0, len)
+    let x = Table.rand.Next(0, len)
+    let y = Table.rand.Next(0, len)
     let word = words.[x].ToLower() + (firstUpper words.[y])
     if Map.containsKey word state.table then
       go()
@@ -40,23 +40,23 @@ let genRandomName state =
   go()
 
 
-let genBool (state) = state.rand.Next(0,2) = 1
+let genBool () = Table.rand.Next(0,2) = 1
 
-let genInt (state) = Utils.biasedRandom(-2147483647/2, 2147483647/2, 20.0)
+let genInt () = Utils.biasedRandom(-2147483647/2, 2147483647/2, 20.0)
   //state.rand.Next(-2147483647/2, 2147483647/2)
 
-let genChar (state) = char (state.rand.Next(32, 127)) |> escapechar
+let genChar () = char (Table.rand.Next(32, 127)) |> escapechar
 
 let genString (state) = 
   genRandomName state
 
-let genConnective state = if state.rand.Next(0,2) = 1 then " and " else " or "
+let genConnective() = if Table.rand.Next(0,2) = 1 then " and " else " or "
 
 
 let genTypeValue (ofType, state) = 
   match ofType with
   | Bool -> 
-    let value = genBool (state)
+    let value = genBool ()
     (Bool , string value)
 
   | String -> 
@@ -64,11 +64,11 @@ let genTypeValue (ofType, state) =
     (String , "\"" + value + "\"")
 
   | Char -> 
-    let value = genChar (state)
+    let value = genChar ()
     (Char , "\'" + string value + "\'")
 
   | Int -> 
-    let value = genInt (state)
+    let value = genInt ()
     (Int , string value)
 
   | Function _ -> failwithf "Can't generate function @ genTypeValue"
@@ -80,9 +80,9 @@ let genRandomType (state) =
 
 
 
-let connective state t = 
+let connective(t) = 
   match t with
-  | Bool   -> genConnective state
+  | Bool   -> genConnective()
   | Int    -> randomArr(intOperators)
   | String -> "+"
   | Char   -> "+"
@@ -90,8 +90,8 @@ let connective state t =
   | Function _ -> failwith "No connective for Function"
 
 
-let comparative (state) = 
-  match state.rand.Next(0,5) with
+let comparative () = 
+  match Table.rand.Next(0,5) with
   | i when i = 0 -> "=="
   | i when i = 1 -> ">"
   | i when i = 2 -> "<"
@@ -108,7 +108,7 @@ let genValue(state, ofType) =
     genTypeValue (ofType, state)
     |> fun (_,v) -> v
   | Some id -> 
-    if state.rand.Next(0, 3) = 0 then
+    if Table.rand.Next(0, 3) = 0 then
       id 
     else
       genTypeValue (ofType, state)
@@ -116,7 +116,7 @@ let genValue(state, ofType) =
       
 
 let genBoolExpr (state) = 
-  genValue(state, Int) + " " + comparative(state) + " " +  genValue(state, Int)
+  genValue(state, Int) + " " + comparative() + " " +  genValue(state, Int)
 
 
 
@@ -127,9 +127,9 @@ let genExpression (state : State) (ofType : Types) (depth : int) =
       genValue(state, ofType)
     else
       if ofType = Bool then
-        genBoolExpr state + " " + connective state ofType + " " + go (depth - 1)
+        genBoolExpr state + " " + connective(ofType) + " " + go (depth - 1)
       else
-      genValue(state, ofType) + " " + connective state ofType + " " + go (depth - 1)
+      genValue(state, ofType) + " " + connective(ofType) + " " + go (depth - 1)
 
   go (depth)
 
@@ -140,3 +140,10 @@ let makeFuncVarnames vars =
     if i = len then s
     else s + ", ") vars
   |> List.fold (+) ""
+
+
+let makeVar (state) = 
+  (
+    randomArr(typeArr),
+    genString(state)
+  )

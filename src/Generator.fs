@@ -33,7 +33,7 @@ module Make =
     getDistribution settings
 
   let makeRandomStatement(depth : int) : Statement = 
-    let x = Utils.rand.Next(0, Array.length code)
+    let x = Table.rand.Next(0, Array.length code)
     match code.[x] with
     | Statement s -> s
     | Block     s -> s (depth - 1)
@@ -45,7 +45,7 @@ module Make =
     if depth <= 0 then
       state
     else 
-      let x = state.rand.Next(Settings.blocklengthMin, Settings.blocklengthMax)
+      let x = Table.rand.Next(Settings.blocklengthMin, Settings.blocklengthMax)
       List.init x (fun _ -> makeRandomStatement(depth))
       |> Monoid.concat
       |> fun block -> block state
@@ -55,32 +55,31 @@ module Make =
   Blocks.blockRef := makeCode
 
 
+
+  let declareFunction name vars (instate : State) = 
+    let varnames = Variables.makeFuncVarnames vars
+    let line = "def " + name + "(" + varnames + ")"+ ":"
+
+    {instate with
+      lines=line::instate.lines;
+    }
+
+  let declareFuncVars vars (instate : State) = 
+    {instate with
+      table= List.fold (fun m (t, s) -> Map.add s t m) instate.table vars
+    }
+
   let funcParts state = 
     let paramcount = 
-      Utils.rand.Next(Settings.parametercountMin, Settings.parametercountMax)
+      Table.rand.Next(Settings.parametercountMin, Settings.parametercountMax)
       
-    let vars = List.init paramcount (fun _ -> (
-                                              Table.randomArr(Variables.typeArr),
-                                              Variables.genString(state))
-                                              )
-    let varnames = Variables.makeFuncVarnames vars
+    let vars = List.init paramcount (fun _ -> (Variables.makeVar state))
     let name = Variables.genString(state)
     let signature = (name, List.map (fun (t, _) -> t) vars)
 
-    let declareFuncVars (instate : State) = 
-      {instate with
-        table= List.fold (fun m (t, s) -> Map.add s t m) instate.table vars
-      }
+    (declareFuncVars vars, signature, declareFunction name vars)
 
-    let declareFunction (instate : State) = 
-      let line = "def " + name + "(" + varnames + ")"+ ":"
-
-      {instate with
-        lines=line::instate.lines;
-      }
     
-    (declareFuncVars, signature, declareFunction)
-
 
   let makeFunction depth = 
 

@@ -8,7 +8,7 @@ open Table
 
 
 let initState = 
-  {lines=[]; table=Map.empty; indent=0; rand=System.Random()}
+  {lines=[]; table=Map.empty; indent=0;}
 
 let printCode state = 
   List.rev state.lines
@@ -55,7 +55,7 @@ let outdent state = {state with indent=state.indent-2}
 
 
 
-let rand = Random()
+// let rand = Random()
 
 let biasedRandom(min, max, bias) = 
   // Bias level 
