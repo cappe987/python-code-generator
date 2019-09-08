@@ -91,7 +91,7 @@ let connective state t =
 
 
 let comparative (state) = 
-  match state.rand.Next(0,4) with
+  match state.rand.Next(0,5) with
   | i when i = 0 -> "=="
   | i when i = 1 -> ">"
   | i when i = 2 -> "<"

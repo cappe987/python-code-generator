@@ -22,9 +22,10 @@ let main argv =
 
     Handle division by zero?
 
-    Funtions not returning anything
+  Funtions not returning anything
   
   Make function calls
+  Add inFunction bool to state to handle return statements.
   
 
 
